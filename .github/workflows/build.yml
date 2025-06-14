@@ -1,0 +1,33 @@
+name: Build and Release GNOME Extension
+
+on:
+  push:
+    tags:
+      - 'v*'  # Trigger on version tags like v1.0.0
+  workflow_dispatch:  # Manual trigger support
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+        # Checks out your repository so the workflow can access files
+
+      - name: Install zip utility
+        run: sudo apt-get install -y zip
+        # Install zip command line tool
+
+      - name: Copy LICENSE file to extension directory and create zip archive
+        run: |
+          cp LICENSE extension
+          zip -r -v gnome-oyainput-indicator@shimamu.github.com.zip extension
+        # Copy files into folder and zip it
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: gnome-oyainput-indicator@shimamu.github.com
+          path: extension
+          # Uploads the extension directory as a build artifact (for debugging or later use)

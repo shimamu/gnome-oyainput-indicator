@@ -1,0 +1,10 @@
+{
+  "uuid": "gnome-oyainput-indicator@shimamu.github.com",
+  "name": "Oyainput Indicator",
+  "description": "Shows the running status of oyainput (running, paused, or not started) in the GNOME top bar.",
+  "shell-version": ["48"],
+  "version": 1,
+  "author": "shimamu",
+  "url": "https://github.com/shimamu/gnome-oyainput-indicator",
+  "gettext-domain": "gnome-oyainput-indicator"
+}

@@ -1,0 +1,23 @@
+/*
+ * stylesheet.css
+ *
+ * CSS styles for the GNOME Shell extension "gnome-oyainput-indicator".
+ * Defines appearance for different oyainput statuses via style classes.
+ *
+ * Author: shimamu
+ * Repository: https://github.com/shimamu/gnome-oyainput-indicator
+ * License: GPL-3.0-or-later
+ */
+
+.oyainput-label {
+  color: #888888; /* Default: gray for not running */
+}
+
+.oyainput-label.running {
+  color: #ffffff; /* White for running */
+}
+
+.oyainput-label.paused {
+  color: #ffffff; /* Whilte for paused */
+}
+
