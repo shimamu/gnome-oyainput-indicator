@@ -12,6 +12,7 @@
 import GObject from 'gi://GObject';
 import St from 'gi://St';
 import GLib from 'gi://GLib';
+import Gio from 'gi://Gio';
 import Clutter from 'gi://Clutter';
 
 import { Extension } from 'resource:///org/gnome/shell/extensions/extension.js';
@@ -20,17 +21,31 @@ import * as Main from 'resource:///org/gnome/shell/ui/main.js';
 
 const PAUSED_FILE_PATH = '/tmp/oyainput-paused';
 
-function isOyainputRunning() {
-    try {
-        let [ok, stdout] = GLib.spawn_command_line_sync('pgrep -x oyainput');
-        return ok && stdout.length > 0;
-    } catch (e) {
-        return false;
-    }
-}
-
 function isPaused() {
     return GLib.file_test(PAUSED_FILE_PATH, GLib.FileTest.EXISTS);
+}
+
+function isOyainputRunningAsync(callback) {
+    let subprocess = new Gio.Subprocess({
+        argv: ['pgrep', '-x', 'oyainput'],
+        flags: Gio.SubprocessFlags.STDOUT_PIPE | Gio.SubprocessFlags.STDERR_PIPE,
+    });
+
+    try {
+        subprocess.init(null);
+        subprocess.communicate_utf8_async(null, null, (proc, res) => {
+            try {
+                let [, stdout] = proc.communicate_utf8_finish(res);
+                callback(stdout.trim().length > 0);
+            } catch (e) {
+                logError(e);
+                callback(false);
+            }
+        });
+    } catch (e) {
+        logError(e);
+        callback(false);
+    }
 }
 
 const OyainputIndicator = GObject.registerClass(
@@ -49,23 +64,25 @@ class OyainputIndicator extends PanelMenu.Button {
 
         this._timeoutId = GLib.timeout_add(GLib.PRIORITY_DEFAULT, 500, () => {
             this._updateLabel();
-            return true;
+            return GLib.SOURCE_CONTINUE;
         });
     }
 
     _updateLabel() {
-        this.label.remove_style_class_name('running');
-        this.label.remove_style_class_name('paused');
+        isOyainputRunningAsync((running) => {
+            this.label.remove_style_class_name('running');
+            this.label.remove_style_class_name('paused');
 
-        if (!isOyainputRunning()) {
-            this.label.set_text('---');
-        } else if (isPaused()) {
-            this.label.set_text('o--');
-            this.label.add_style_class_name('paused');
-        } else {
-            this.label.set_text('oya');
-            this.label.add_style_class_name('running');
-        }
+            if (!running) {
+                this.label.set_text('---');
+            } else if (isPaused()) {
+                this.label.set_text('o--');
+                this.label.add_style_class_name('paused');
+            } else {
+                this.label.set_text('oya');
+                this.label.add_style_class_name('running');
+            }
+        });
     }
 
     destroy() {
