@@ -88,3 +88,11 @@ This extension automatically detects whether `oyainput` is active, paused (`/tmp
 
 This project is licensed under the GNU General Public License v3.0 or later. See [LICENSE](LICENSE) for details.
 
+## Development / Maintenance
+
+For maintainers or future contributors:
+
+- The GNOME Shell extension ZIP package is automatically built by GitHub Actions when a tag matching `v*` is created.  
+  For details, see the workflow configuration file: [`.github/workflows/build.yml`](.github/workflows/build.yml)
+- The `Makefile` is used to combine the individual status images in the `assets/` directory into a single `screenshot-all.png`.
+
