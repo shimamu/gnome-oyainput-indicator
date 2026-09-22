@@ -72,7 +72,7 @@ You can install the extension directly from the official GNOME Extensions websit
 
 | Extension Version | GNOME Shell Version |
 |-------------------|---------------------|
-| ~v2.0             | 48                  |
+| ~v2.0             | 48, 49, 50          |
 
 ## Requirements
 
