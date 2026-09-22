@@ -2,7 +2,7 @@
   "uuid": "gnome-oyainput-indicator@shimamu.github.com",
   "name": "Oyainput Indicator",
   "description": "Shows the running status of oyainput (running, paused, or not started) in the GNOME top bar.",
-  "shell-version": ["48"],
+  "shell-version": ["48", "49", "50"],
   "version": 2,
   "author": "shimamu",
   "url": "https://github.com/shimamu/gnome-oyainput-indicator",
